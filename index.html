@@ -3,74 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>新春好運刮刮卡雨</title>
+    <title>錢，給我錢</title>
     <style>
         :root {
-            --gold: #ffca28;
-            --red: #b71c1c;
+            --gold: #f9d423;
+            --money-green: #4caf50;
         }
         body {
             margin: 0;
-            background: var(--red);
+            background: radial-gradient(circle, #8e0e00 0%, #1f0505 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-family: "Microsoft JhengHei", sans-serif;
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
             color: var(--gold);
             overflow: hidden;
             touch-action: manipulation;
             height: 100vh;
         }
 
-        h1 { margin-top: 20px; text-shadow: 2px 2px 4px #000; z-index: 100; }
-        .instructions { color: #fff; margin-bottom: 10px; z-index: 100; }
+        /* 標題：錢，給我錢 */
+        h1 { 
+            margin-top: 40px; 
+            font-size: 45px;
+            font-weight: 900;
+            text-align: center;
+            background: linear-gradient(to bottom, #fff 0%, var(--gold) 50%, #ff5b00 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.8));
+            animation: shake 0.5s infinite alternate;
+        }
 
-        /* 掉落畫面層 */
+        /* 震動效果：增加討錢的迫切感 */
+        @keyframes shake {
+            0% { transform: rotate(-2deg); }
+            100% { transform: rotate(2deg); }
+        }
+
+        .instructions { color: #fff; margin-bottom: 10px; font-weight: bold; text-shadow: 1px 1px 5px #000; }
+
         #selection-screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            overflow: hidden;
         }
 
+        /* 掉下來的東西：錢袋與金錢 */
         .falling-card {
             position: absolute;
-            width: 80px;
+            width: 85px;
             height: 110px;
-            background: #d32f2f;
-            border: 2px solid var(--gold);
-            border-radius: 8px;
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            border: 3px solid #fff;
+            border-radius: 15px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             font-size: 40px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
             cursor: pointer;
             animation: fall linear forwards;
         }
+        .falling-card::after {
+            content: 'CASH';
+            font-size: 12px;
+            font-weight: bold;
+            color: #8e0e00;
+        }
 
         @keyframes fall {
-            from { transform: translateY(-120px) rotate(0deg); }
+            from { transform: translateY(-150px) rotate(0deg); }
             to { transform: translateY(110vh) rotate(360deg); }
         }
 
-        /* 刮獎遊戲層 */
         #game-area {
             display: none;
             flex-direction: column;
             align-items: center;
             z-index: 200;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
         #container {
             position: relative;
-            width: 300px;
-            height: 450px;
-            background: #fff;
-            border: 8px solid var(--gold);
-            border-radius: 15px;
+            width: 320px;
+            height: 480px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 6px solid var(--gold);
+            border-radius: 25px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
         }
 
         #prize-layer {
@@ -80,53 +103,50 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #fff9c4;
+            background: radial-gradient(circle, #fff 0%, #fbc02d 100%);
         }
 
-        .prize-text { font-size: 24px; color: #d32f2f; font-weight: bold; }
-        .prize-amount { font-size: 52px; color: #d32f2f; margin: 10px 0; }
+        .prize-text { font-size: 26px; color: #d32f2f; font-weight: 900; }
+        .prize-amount { font-size: 70px; color: #1b5e20; margin: 15px 0; font-weight: 900; }
 
         #scratch-canvas {
             position: absolute;
             top: 0; left: 0;
             z-index: 10;
-            touch-action: none;
         }
 
-        .btn-group { margin-top: 20px; }
         button {
-            padding: 12px 30px;
-            font-size: 18px;
-            background: var(--gold);
-            color: var(--red);
+            margin-top: 30px;
+            padding: 18px 50px;
+            font-size: 22px;
+            background: linear-gradient(to bottom, #4caf50 0%, #1b5e20 100%);
+            color: white;
             border: none;
-            border-radius: 25px;
-            font-weight: bold;
-            box-shadow: 0 4px 0 #c79100;
+            border-radius: 50px;
+            font-weight: 900;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
         }
     </style>
 </head>
 <body>
 
-    <h1>🧧 新春刮刮雨</h1>
+    <h1>錢，給我錢</h1>
     
     <div id="selection-screen">
-        <p class="instructions" style="text-align: center; margin-top: 80px;">點擊一張掉落中的卡片！</p>
+        <p class="instructions" style="text-align: center; margin-top: 110px;">快抓住那些飛過去的財富！</p>
     </div>
 
     <div id="game-area">
-        <p class="instructions">刮開領取你的好運獎金！</p>
+        <p class="instructions">用力刮開，把錢拿走！</p>
         <div id="container">
             <div id="prize-layer">
-                <div class="prize-text">恭喜獲得</div>
+                <div class="prize-text">這份賞給你的</div>
                 <div id="display-amount" class="prize-amount">$0</div>
-                <div style="font-size: 14px; color: #777;">財源廣進 · 萬事如意</div>
+                <div style="font-size: 18px; color: #1b5e20; font-weight: 900;">恭喜發財 ‧ 錢滾錢</div>
             </div>
-            <canvas id="scratch-canvas" width="300" height="450"></canvas>
+            <canvas id="scratch-canvas" width="320" height="480"></canvas>
         </div>
-        <div class="btn-group">
-            <button onclick="resetToSelection()">重新挑戰</button>
-        </div>
+        <button onclick="resetToSelection()">我要更多錢！</button>
     </div>
 
     <script>
@@ -138,48 +158,32 @@
         
         let isDrawing = false;
         let spawnInterval;
-        const prizes = [200, 666, 888]; // 你的指定獎項
+        const prizes = [200, 666, 888];
+        const emojis = ['💰', '💵', '💎', '🤑'];
 
-        // 開始掉落卡片
         function startFalling() {
             spawnInterval = setInterval(() => {
                 const card = document.createElement('div');
                 card.className = 'falling-card';
-                card.innerHTML = '🧧';
-                card.style.left = Math.random() * (window.innerWidth - 80) + 'px';
-                
-                const duration = Math.random() * 2 + 3; // 3-5秒掉完
+                card.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                card.style.left = Math.random() * (window.innerWidth - 85) + 'px';
+                const duration = Math.random() * 1.5 + 2; 
                 card.style.animationDuration = duration + 's';
 
-                // 點擊事件
                 card.onclick = () => pickCard(card);
-                card.ontouchstart = (e) => {
-                    e.preventDefault();
-                    pickCard(card);
-                };
+                card.ontouchstart = (e) => { e.preventDefault(); pickCard(card); };
 
                 selectionScreen.appendChild(card);
-
-                // 超出畫面移除
-                setTimeout(() => {
-                    if(card.parentNode) card.remove();
-                }, duration * 1000);
-            }, 600);
+                setTimeout(() => { if(card.parentNode) card.remove(); }, duration * 1000);
+            }, 450);
         }
 
-        // 選中卡片
         function pickCard(card) {
             clearInterval(spawnInterval);
-            
-            // 隨機選一個獎項
             const winAmount = prizes[Math.floor(Math.random() * prizes.length)];
             displayAmount.innerText = `$${winAmount}`;
-
-            // 畫面轉換
             selectionScreen.style.display = 'none';
-            // 清除畫面上所有殘留卡片
             selectionScreen.querySelectorAll('.falling-card').forEach(c => c.remove());
-            
             gameArea.style.display = 'flex';
             initCanvas();
         }
@@ -187,13 +191,19 @@
         function initCanvas() {
             canvas.style.opacity = '1';
             ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = '#C0C0C0';
+            
+            // 繪製閃亮金色的刮刮塗層
+            const grad = ctx.createLinearGradient(0, 0, 320, 480);
+            grad.addColorStop(0, '#ffd700');
+            grad.addColorStop(0.5, '#fff7ad');
+            grad.addColorStop(1, '#ff8c00');
+            ctx.fillStyle = grad;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            ctx.fillStyle = '#9e9e9e';
+            ctx.fillStyle = '#8e0e00';
             ctx.font = 'bold 30px Microsoft JhengHei';
             ctx.textAlign = 'center';
-            ctx.fillText('刮開看驚喜', 150, 225);
+            ctx.fillText('別客氣，刮！', 160, 240);
         }
 
         function scratch(e) {
@@ -204,10 +214,8 @@
 
             ctx.globalCompositeOperation = 'destination-out';
             ctx.beginPath();
-            ctx.arc(x, y, 30, 0, Math.PI * 2);
+            ctx.arc(x, y, 40, 0, Math.PI * 2);
             ctx.fill();
-            
-            // 刮開超過 50% 自動揭曉
             checkPercent();
         }
 
@@ -217,8 +225,8 @@
             for (let i = 0; i < imageData.data.length; i += 4) {
                 if (imageData.data[i + 3] === 0) cleared++;
             }
-            if (cleared > (imageData.data.length / 4) * 0.5) {
-                canvas.style.transition = 'opacity 0.8s';
+            if (cleared > (imageData.data.length / 4) * 0.4) {
+                canvas.style.transition = 'opacity 0.6s';
                 canvas.style.opacity = '0';
             }
         }
@@ -229,7 +237,6 @@
             startFalling();
         }
 
-        // 事件監聽
         canvas.addEventListener('mousedown', () => isDrawing = true);
         window.addEventListener('mouseup', () => isDrawing = false);
         canvas.addEventListener('mousemove', scratch);
@@ -237,7 +244,6 @@
         canvas.addEventListener('touchend', () => isDrawing = false);
         canvas.addEventListener('touchmove', scratch);
 
-        // 初始化開始
         startFalling();
     </script>
 </body>
