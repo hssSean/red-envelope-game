@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>錢，給我錢</title>
     <style>
         :root {
@@ -19,13 +19,15 @@
             color: var(--gold);
             overflow: hidden;
             touch-action: manipulation;
-            height: 100vh;
+            height: 100vh; /* 滿版高度 */
+            padding-bottom: env(safe-area-inset-bottom); /* iPhone 安全區域 */
         }
 
         /* 標題：錢，給我錢 */
         h1 { 
-            margin-top: 40px; 
-            font-size: 45px;
+            margin-top: 5vh; /* 使用相對高度，確保不同手機比例一致 */
+            margin-bottom: 10px;
+            font-size: clamp(32px, 10vw, 45px); /* 自動縮放字體 */
             font-weight: 900;
             text-align: center;
             background: linear-gradient(to bottom, #fff 0%, var(--gold) 50%, #ff5b00 100%);
@@ -33,47 +35,48 @@
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0px 5px 10px rgba(0,0,0,0.8));
             animation: shake 0.5s infinite alternate;
+            z-index: 100;
         }
 
-        /* 震動效果：增加討錢的迫切感 */
         @keyframes shake {
             0% { transform: rotate(-2deg); }
             100% { transform: rotate(2deg); }
         }
 
-        .instructions { color: #fff; margin-bottom: 10px; font-weight: bold; text-shadow: 1px 1px 5px #000; }
+        .instructions { 
+            color: #fff; 
+            margin-bottom: 5px; 
+            font-size: 14px;
+            font-weight: bold; 
+            text-shadow: 1px 1px 5px #000; 
+            z-index: 100;
+        }
 
         #selection-screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
         }
 
-        /* 掉下來的東西：錢袋與金錢 */
+        /* 掉落物比例微調 */
         .falling-card {
             position: absolute;
-            width: 85px;
-            height: 110px;
+            width: 70px; /* 從 85 縮小到 70 */
+            height: 90px;
             background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
-            border: 3px solid #fff;
-            border-radius: 15px;
+            border: 2px solid #fff;
+            border-radius: 12px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-size: 40px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+            font-size: 32px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.6);
             cursor: pointer;
             animation: fall linear forwards;
         }
-        .falling-card::after {
-            content: 'CASH';
-            font-size: 12px;
-            font-weight: bold;
-            color: #8e0e00;
-        }
 
         @keyframes fall {
-            from { transform: translateY(-150px) rotate(0deg); }
+            from { transform: translateY(-120px) rotate(0deg); }
             to { transform: translateY(110vh) rotate(360deg); }
         }
 
@@ -82,18 +85,19 @@
             flex-direction: column;
             align-items: center;
             z-index: 200;
-            margin-top: 10px;
+            width: 100%;
         }
 
+        /* 縮小容器比例，確保手機完整顯示 */
         #container {
             position: relative;
-            width: 320px;
-            height: 480px;
+            width: 280px;  /* 從 320 縮小 */
+            height: 400px; /* 從 480 縮小 */
             background: rgba(0, 0, 0, 0.5);
-            border: 6px solid var(--gold);
-            border-radius: 25px;
+            border: 5px solid var(--gold);
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
         }
 
         #prize-layer {
@@ -106,8 +110,8 @@
             background: radial-gradient(circle, #fff 0%, #fbc02d 100%);
         }
 
-        .prize-text { font-size: 26px; color: #d32f2f; font-weight: 900; }
-        .prize-amount { font-size: 70px; color: #1b5e20; margin: 15px 0; font-weight: 900; }
+        .prize-text { font-size: 20px; color: #d32f2f; font-weight: 900; }
+        .prize-amount { font-size: 56px; color: #1b5e20; margin: 10px 0; font-weight: 900; }
 
         #scratch-canvas {
             position: absolute;
@@ -116,15 +120,15 @@
         }
 
         button {
-            margin-top: 30px;
-            padding: 18px 50px;
-            font-size: 22px;
+            margin-top: 20px;
+            padding: 12px 40px;
+            font-size: 18px;
             background: linear-gradient(to bottom, #4caf50 0%, #1b5e20 100%);
             color: white;
             border: none;
-            border-radius: 50px;
+            border-radius: 40px;
             font-weight: 900;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
     </style>
 </head>
@@ -133,7 +137,7 @@
     <h1>錢，給我錢</h1>
     
     <div id="selection-screen">
-        <p class="instructions" style="text-align: center; margin-top: 110px;">快抓住那些飛過去的財富！</p>
+        <p class="instructions" style="text-align: center; margin-top: 130px;">快抓住飛過去的財富！</p>
     </div>
 
     <div id="game-area">
@@ -142,9 +146,9 @@
             <div id="prize-layer">
                 <div class="prize-text">這份賞給你的</div>
                 <div id="display-amount" class="prize-amount">$0</div>
-                <div style="font-size: 18px; color: #1b5e20; font-weight: 900;">恭喜發財 ‧ 錢滾錢</div>
+                <div style="font-size: 16px; color: #1b5e20; font-weight: 900;">恭喜發財 ‧ 錢滾錢</div>
             </div>
-            <canvas id="scratch-canvas" width="320" height="480"></canvas>
+            <canvas id="scratch-canvas" width="280" height="400"></canvas>
         </div>
         <button onclick="resetToSelection()">我要更多錢！</button>
     </div>
@@ -158,7 +162,8 @@
         
         let isDrawing = false;
         let spawnInterval;
-        const prizes = [168, 666, 888];
+        // 依照要求設定獎項
+        const prizes = [200, 666, 888];
         const emojis = ['💰', '💵', '💎', '🤑'];
 
         function startFalling() {
@@ -166,7 +171,7 @@
                 const card = document.createElement('div');
                 card.className = 'falling-card';
                 card.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
-                card.style.left = Math.random() * (window.innerWidth - 85) + 'px';
+                card.style.left = Math.random() * (window.innerWidth - 75) + 'px';
                 const duration = Math.random() * 1.5 + 2; 
                 card.style.animationDuration = duration + 's';
 
@@ -175,7 +180,7 @@
 
                 selectionScreen.appendChild(card);
                 setTimeout(() => { if(card.parentNode) card.remove(); }, duration * 1000);
-            }, 450);
+            }, 500);
         }
 
         function pickCard(card) {
@@ -192,8 +197,7 @@
             canvas.style.opacity = '1';
             ctx.globalCompositeOperation = 'source-over';
             
-            // 繪製閃亮金色的刮刮塗層
-            const grad = ctx.createLinearGradient(0, 0, 320, 480);
+            const grad = ctx.createLinearGradient(0, 0, 280, 400);
             grad.addColorStop(0, '#ffd700');
             grad.addColorStop(0.5, '#fff7ad');
             grad.addColorStop(1, '#ff8c00');
@@ -201,9 +205,9 @@
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             ctx.fillStyle = '#8e0e00';
-            ctx.font = 'bold 30px Microsoft JhengHei';
+            ctx.font = 'bold 24px Microsoft JhengHei';
             ctx.textAlign = 'center';
-            ctx.fillText('別客氣，刮！', 160, 240);
+            ctx.fillText('別客氣，刮！', 140, 200);
         }
 
         function scratch(e) {
@@ -214,7 +218,7 @@
 
             ctx.globalCompositeOperation = 'destination-out';
             ctx.beginPath();
-            ctx.arc(x, y, 40, 0, Math.PI * 2);
+            ctx.arc(x, y, 35, 0, Math.PI * 2);
             ctx.fill();
             checkPercent();
         }
@@ -248,5 +252,3 @@
     </script>
 </body>
 </html>
-
-
